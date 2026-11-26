@@ -259,7 +259,7 @@ const crumbs = computed(() => ['Accueil', 'Inspirations & conseils', 'Mon premie
             </ul>
             <p v-else class="demo__hint">Aucun produit dans cette pièce pour l’instant.</p>
           </section>
-          <p class="demo__hint">Produits réels de la gamme Les Essentiels, prix et dimensions relevés sur vente-unique.com le 26/11/2026. Sélection faite à la main pour la démo : en production, elle viendrait d’un moteur de recommandation.</p>
+          <p class="demo__hint">Produits réels de la gamme Les Essentiels, prix et dimensions relevés sur vente-unique.com le 26/11/2026. Sélection faite à la main pour la démo : en production, elle viendrait d’un moteur de recommandation. Dans la démo, « Remplacer » ouvre la fiche du produit sur vente-unique.com pour choisir un autre coloris ou modèle.</p>
         </div>
 
         <aside class="demo__result-side" aria-labelledby="sel-summary">
@@ -307,6 +307,8 @@ const crumbs = computed(() => ['Accueil', 'Inspirations & conseils', 'Mon premie
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 body { margin: 0; font-family: 'Poppins', system-ui, sans-serif; color: #130c0c; background: #fff; }
+/* Démo sans Recoleta : titre en Poppins SemiBold 32/40, comme la maquette Figma (sur le site : Recoleta 400, 40/48). */
+:root { --abp-title-weight: 600; --abp-title-size: 32px; --abp-title-line-height: 40px; }
 .demo__page { max-width: 1296px; margin: 0 auto; padding: 32px 16px 64px; }
 .demo__step { display: grid; gap: 24px; max-width: 720px; }
 .demo__title { margin: 0; font-size: 32px; line-height: 40px; font-weight: 600; }
@@ -339,7 +341,7 @@ main h1:focus { outline: none; }
 .demo__result { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 64px; align-items: start; }
 .demo__result-main { display: grid; gap: 24px; }
 .demo__tag { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid #56434580; border-radius: 10px; font-size: 14px; }
-.demo__link { padding: 0; border: 0; background: none; font: 400 14px/20px 'Poppins', sans-serif; color: #130c0c; text-decoration: underline; cursor: pointer; }
+.demo__link { display: inline-block; padding: 12px 0; margin: -12px 0; border: 0; background: none; font: 400 14px/20px 'Poppins', sans-serif; color: #130c0c; text-decoration: underline; cursor: pointer; }
 .demo__link:focus-visible { outline: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0072d6; border-radius: 4px; }
 .demo__room { display: grid; gap: 16px; }
 .demo__mbar { display: none; }
@@ -377,7 +379,7 @@ main h1:focus { outline: none; }
 .pc__dim b { font-weight: 500; }
 .pc__grow { flex: 1; }
 .pc__actions { display: flex; gap: 8px; margin-top: 12px; }
-.pc__btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 0 12px; border-radius: 28px; font: 500 12px/16px 'Poppins', sans-serif; color: #130c0c; text-decoration: none; cursor: pointer; }
+.pc__btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 12px; border-radius: 28px; font: 500 12px/16px 'Poppins', sans-serif; color: #130c0c; text-decoration: none; cursor: pointer; }
 .pc__btn--secondary { border: 1px solid #56434580; background: #fff; }
 .pc__btn--secondary:hover { border-color: #170d0ecc; }
 .pc__btn--tertiary { border: 0; background: #c5b9bb24; }
@@ -392,9 +394,9 @@ main h1:focus { outline: none; }
 .bs__track { display: block; height: 8px; border-radius: 999px; background: #b8a8ab52; overflow: hidden; }
 .bs__track span { display: block; height: 100%; border-radius: 999px; background: #130c0c; }
 .bs__track--thin { height: 6px; margin-top: 4px; }
-.bs__status { margin: 0; display: flex; gap: 8px; align-items: flex-start; padding: 8px 12px; border-radius: 10px; font-size: 13px; line-height: 18px; }
+.bs__status { margin: 0; display: flex; gap: 8px; align-items: flex-start; padding: 8px 12px; border-radius: 10px; font-size: 14px; line-height: 20px; font-weight: 500; }
 .bs__status svg { flex: none; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; }
-.bs__status.is-ok { background: #e1fef5; color: #008554; }
+.bs__status.is-ok { background: #e1fef5; color: #006b44; }
 .bs__status.is-over { background: #fff1eb; color: #bd4800; }
 .bs__sub { margin: 0; font-size: 14px; line-height: 20px; font-weight: 600; }
 .bs__lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }

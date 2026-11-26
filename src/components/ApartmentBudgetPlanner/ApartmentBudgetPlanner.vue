@@ -133,13 +133,19 @@ watch(
   },
 )
 
+// Valeur en cours d'envoi : deux interactions dans le même cycle (ex. deux clics programmatiques)
+// se composent au lieu de repartir de la même valeur de props.
+let pending: BudgetPlannerValue | null = null
+const current = () => pending ?? props.modelValue
 function update(patch: Partial<BudgetPlannerValue>) {
-  emit('update:modelValue', { ...props.modelValue, ...patch })
+  pending = { ...current(), ...patch }
+  emit('update:modelValue', pending)
+  nextTick(() => { pending = null })
 }
 
 /* ---------- budget ---------- */
 function selectPreset(preset: BudgetPreset) {
-  const amount = props.modelValue.amount
+  const amount = current().amount
   const keepAmount = amount !== null && amount >= preset.min && (preset.max === null || amount < preset.max)
   if (!keepAmount) rawAmount.value = ''
   update({ presetId: preset.id, amount: keepAmount ? amount : null })
@@ -149,9 +155,10 @@ function onAmountInput(event: Event) {
   rawAmount.value = (event.target as HTMLInputElement).value
   const parsed = parseAmount(rawAmount.value)
   if (parsed === null) return update({ amount: null })
-  if (Number.isNaN(parsed) || parsed < props.minAmount || parsed > props.maxAmount) return update({ amount: null })
+  // Montant invalide : aucune tranche ne doit rester cochée, le budget redevient « à définir ».
+  if (Number.isNaN(parsed) || parsed < props.minAmount || parsed > props.maxAmount) return update({ amount: null, presetId: null })
   const preset = presetForAmount(parsed, props.presets)
-  update({ amount: parsed, presetId: preset ? preset.id : props.modelValue.presetId })
+  update({ amount: parsed, presetId: preset ? preset.id : current().presetId })
 }
 
 /* ---------- priorités ---------- */
@@ -159,7 +166,7 @@ const limitReached = computed(() => props.modelValue.priorities.length >= props.
 const rank = (roomId: string) => props.modelValue.priorities.indexOf(roomId) + 1
 
 function onToggleRoom(room: PlannerRoom) {
-  const next = togglePriority(props.modelValue.priorities, room.id, props.maxPriorities)
+  const next = togglePriority(current().priorities, room.id, props.maxPriorities)
   update({ priorities: next })
   const added = next.includes(room.id)
   announcement.value = added
@@ -443,7 +450,7 @@ const mobileSummaryOpen = ref(false)
 
 .abp-layout { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: var(--spacing-extra-extra-large, 64px); align-items: start; }
 .abp-main { display: grid; gap: var(--spacing-extra-large, 32px); min-width: 0; }
-.abp-title { margin: 0 0 var(--spacing-small, 12px); font-family: var(--font-family-heading, 'Recoleta', 'Poppins', system-ui, sans-serif); font-weight: 600; font-size: 40px; line-height: 48px; }
+.abp-title { margin: 0 0 var(--spacing-small, 12px); font-family: var(--font-family-heading, 'Recoleta', 'Poppins', system-ui, sans-serif); font-weight: var(--abp-title-weight, 400); font-size: var(--abp-title-size, 40px); line-height: var(--abp-title-line-height, 48px); }
 .abp-text { margin: 0; max-width: 720px; font-size: 16px; line-height: 24px; color: var(--text-icon-neutral-medium, #170d0ecc); }
 .abp-recall { display: flex; justify-content: space-between; align-items: center; gap: var(--spacing-small, 12px); padding: var(--spacing-small, 12px) var(--spacing-medium, 16px); border-radius: var(--radius-small, 14px); background: var(--surface-neutral, #c5b9bb24); }
 .abp-recall > span { display: grid; gap: 2px; }
@@ -491,7 +498,7 @@ const mobileSummaryOpen = ref(false)
 .abp-btn--secondary:hover:not(:disabled) { border-color: var(--interactive-secondary-stroke-rollover, #170d0ecc); color: var(--interactive-text-icon-background-rollover, #130c0c); }
 .abp-btn--secondary:disabled { border-color: var(--interactive-secondary-stroke-disabled, #b8a8ab52); color: var(--interactive-text-icon-background-disabled, #56434580); cursor: not-allowed; }
 .abp-btn:focus-visible, .abp-link:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--shadow-focus-focus, #fff), 0 0 0 4px var(--shadow-focus-default, #0072d6); }
-.abp-link { padding: 0; border: 0; background: none; font: inherit; font-weight: 500; color: var(--text-icon-neutral-medium, #170d0ecc); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; border-radius: 4px; }
+.abp-link { display: inline-block; padding: 14px 0; margin: -14px 0; border: 0; background: none; font: inherit; font-weight: 500; color: var(--text-icon-neutral-medium, #170d0ecc); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; border-radius: 4px; }
 .abp-caption { display: block; font-size: 12px; line-height: 16px; color: var(--text-icon-neutral-light, #1f14159c); }
 .abp-strong { display: block; font-weight: 500; }
 .abp-spinner { width: 14px; height: 14px; border: 2px solid #ffffff66; border-top-color: #fff; border-radius: 50%; animation: abp-spin .8s linear infinite; }

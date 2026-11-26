@@ -7,6 +7,7 @@ import {
   parseAmount,
   presetForAmount,
   togglePriority,
+  joinLabels,
 } from '../src/components/ApartmentBudgetPlanner/budget-logic'
 import type { BudgetPlannerValue } from '../src/components/ApartmentBudgetPlanner'
 
@@ -146,5 +147,45 @@ describe('briques réutilisables', () => {
     expect(w.text()).toContain('1 500 €')
     await w.find('button').trigger('click')
     expect(w.emitted('edit-step')![0]).toEqual([3])
+  })
+})
+
+describe('corrections de l’audit', () => {
+  it('joinLabels : « Bureau et cuisine »', () => {
+    expect(joinLabels(['Bureau', 'Cuisine'])).toBe('Bureau et cuisine')
+    expect(joinLabels(['Bureau', 'Cuisine', 'Salle de bain'])).toBe('Bureau, cuisine et salle de bain')
+    expect(joinLabels(['Salon'])).toBe('Salon')
+  })
+
+  it('un montant invalide décoche la tranche', async () => {
+    const w = setup()
+    const input = w.find('input[inputmode]')
+    await input.setValue('10000')
+    expect(w.props('modelValue').presetId).toBe('gte-1800')
+    await input.setValue('10001')
+    expect(w.props('modelValue').presetId).toBeNull()
+    expect(w.props('modelValue').amount).toBeNull()
+  })
+
+  it('deux clics dans le même cycle gardent les deux priorités', async () => {
+    const w = setup()
+    const boxes = w.findAll('input[type="checkbox"]')
+    ;(boxes[0].element as HTMLInputElement).click()
+    ;(boxes[1].element as HTMLInputElement).click()
+    await w.vm.$nextTick()
+    expect(w.props('modelValue').priorities).toEqual(['salon', 'chambre'])
+  })
+
+  it('affiche le contenu du slot summary-footer', () => {
+    const w = mount(ApartmentBudgetPlanner, {
+      props: { modelValue: empty, rooms },
+      slots: { 'summary-footer': '<p class="reassure">30 jours satisfait ou remboursé</p>' },
+    })
+    expect(w.find('.abp-summary__footer .reassure').exists()).toBe(true)
+  })
+
+  it('le retour mobile porte le nom de l’étape précédente', () => {
+    const w = setup()
+    expect(w.find('.vu-steps__back').text()).toContain('Mes pièces')
   })
 })

@@ -71,7 +71,7 @@ const emit = defineEmits<{ (e: 'edit-step', step: number): void }>()
 .vu-summary__row { display: grid; grid-template-columns: 1fr auto; column-gap: var(--spacing-small, 12px); }
 .vu-summary__row dt { font-size: 12px; line-height: 16px; color: var(--text-icon-neutral-light, #1f14159c); }
 .vu-summary__row dd { margin: 2px 0 0; font-weight: 500; grid-column: 1; }
-.vu-summary__link { grid-column: 2; grid-row: 1; padding: 0; border: 0; background: none; font: 400 12px/16px var(--font-family-base, 'Poppins', sans-serif); color: var(--text-icon-neutral-medium, #170d0ecc); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; border-radius: 4px; }
+.vu-summary__link { grid-column: 2; grid-row: 1; padding: 14px 0; margin: -14px 0; border: 0; background: none; font: 400 12px/16px var(--font-family-base, 'Poppins', sans-serif); color: var(--text-icon-neutral-medium, #170d0ecc); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; border-radius: 4px; }
 .vu-summary__link:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--shadow-focus-focus, #fff), 0 0 0 4px var(--shadow-focus-default, #0072d6); }
 .vu-summary__block { display: grid; gap: var(--spacing-small, 12px); padding-top: var(--spacing-large, 24px); border-top: 1px solid var(--surface-separator, #b8a8ab52); }
 .vu-summary__sub { margin: 0; font-size: 14px; line-height: 20px; font-weight: 600; }

@@ -12,7 +12,7 @@ Composant Vue 3 qui permet à une personne qui meuble son premier logement de fi
 ```bash
 npm install
 npm run dev              # démo du parcours en 4 étapes (données de démonstration)
-npm test                 # 16 tests Vitest (logique, composant, briques seules)
+npm test                 # 21 tests Vitest (logique, composant, briques seules, cas limites)
 npm run build            # vérification TypeScript + build
 SINGLE=1 npm run build   # démo en un seul fichier dist/index.html
 ```
@@ -104,6 +104,14 @@ Repris tel quel : Poppins (`--font-family-base`), couleurs squid/red/orange/gree
 | `update:modelValue` | `BudgetPlannerValue` | À chaque changement de tranche, de montant ou de priorité. |
 | `submit` | `{ value, referenceAmount }` | Clic sur le bouton principal, données valides. `referenceAmount` = montant exact, ou milieu de la tranche. |
 | `invalid` | `PlannerError[]` `{ field, message }` | Clic sur le bouton principal, données invalides. Le focus va au premier champ en erreur. |
+
+### Slot
+| Slot | Rôle |
+|---|---|
+| `summary-footer` | Contenu libre sous les boutons du récapitulatif (ex. réassurance du site). Masqué sous 768 px. |
+
+### Exports utiles
+`computeAllocation(total, priorités, pièces, poids?)` calcule la répartition indicative ; `joinLabels(['Bureau', 'Cuisine'])` renvoie « Bureau et cuisine ». Tous deux sont exportés par `index.ts`.
 | `previous` | — | « Étape précédente » (bouton desktop, lien mobile). |
 | `edit-step` | `number` | Clic sur une étape terminée ou un « Modifier » du récapitulatif. |
 | `edit-style` | — | « Modifier » du style choisi. |
@@ -112,8 +120,8 @@ Repris tel quel : Poppins (`--font-family-base`), couleurs squid/red/orange/gree
 | Élément | États |
 |---|---|
 | Choix encadré | défaut · survol (bord squid-700) · focus clavier (anneau 2 px blanc + 4 px blue-600) · sélectionné (bord 2 px, contrôle plein) · désactivé (opacité 0,5, non focusable) |
-| Champ montant | défaut · focus (fond blanc + anneau) · erreur (bord rouge + message, `aria-invalid`) · désactivé |
-| Bouton principal | défaut · survol · focus · désactivé (aucune pièce ou `loading`) · chargement |
+| Champ montant | défaut · focus (fond blanc + anneau) · erreur (bord rouge + message, `aria-invalid` ; un montant invalide décoche la tranche) · désactivé |
+| Bouton principal | défaut · survol · focus · **indisponible** (étape incomplète : grisé, `aria-disabled`, reste cliquable pour afficher les erreurs, raison affichée dessous) · désactivé (aucune pièce ou `loading`) · chargement |
 | Pièces | limite atteinte (autres pièces désactivées + message) · état vide (aucune pièce → « Choisir mes pièces ») |
 | Récapitulatif | budget « À définir » · répartition masquée tant qu'aucun budget n'est choisi · « À l’étape suivante » cite les pièces prioritaires |
 | Compteur | « n sur 3 sélectionnée(s) », passe en couleur attention à la limite (avec message texte) |
@@ -178,11 +186,19 @@ function goToSelection({ value, referenceAmount }) {
 </template>
 ```
 
+## Titre et police
+Le titre utilise `--font-family-heading` (Recoleta sur le site). Graisse et taille sont réglables par variables :
+`--abp-title-weight` (défaut `400`), `--abp-title-size` (`40px`), `--abp-title-line-height` (`48px`), soit Recoleta 400 40/48 comme sur le site.
+La démo, sans Recoleta, utilise Poppins SemiBold 32/40 comme la maquette Figma (`--abp-title-weight: 600; --abp-title-size: 32px; --abp-title-line-height: 40px`).
+
+## Cibles tactiles
+Choix encadrés 62 px, boutons et champ 48 px, boutons des cartes produit 44 px ; les liens texte (« Modifier ») ont une zone de clic de 44 px de haut.
+
 ## Tokens
 Le composant utilise **les noms des variables CSS du site** (`--interactive-primary-background-default`, `--stroke-neutral-hard`, `--spacing-small`, `--radius-small`, `--font-family-base`…), avec en repli la valeur relevée le 25/11/2026. Intégré à vente-unique.com, il hérite automatiquement des tokens officiels ; isolé, il garde le même rendu.
 
 ## Points ouverts
-- Police de titre `--font-family-heading` (Recoleta) : chargée par le site ; en dehors, repli Georgia.
+- Police de titre `--font-family-heading` (Recoleta) : chargée par le site ; en dehors, repli Poppins.
 - Bornes 300 – 10 000 €, tranches et poids 40/35/25 : hypothèses produit à valider avec les données.
 - Le style est choisi en haut de l'étape 3, hors de ce composant (événement `edit-style`).
 
