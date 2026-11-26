@@ -418,6 +418,8 @@ const mobileSummaryOpen = ref(false)
             {{ previousLabel }}
           </button>
         </div>
+        <!-- Contenu libre sous les actions (ex. réassurance du site) -->
+        <div v-if="$slots['summary-footer']" class="abp-summary__footer"><slot name="summary-footer" /></div>
       </aside>
     </div>
 
@@ -479,6 +481,7 @@ const mobileSummaryOpen = ref(false)
 
 /* Boutons (.button-container primary / secondary du site) */
 .abp-actions { display: grid; gap: var(--spacing-small, 12px); }
+.abp-summary__footer { margin-top: var(--spacing-large, 24px); }
 .abp-actions__help { margin: -8px 0 0; text-align: center; }
 .abp-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-extra-small, 8px); min-height: 48px; padding: var(--spacing-small, 12px) var(--spacing-large, 24px); border-radius: var(--radius-large, 28px); font: 500 14px/20px var(--font-family-base, 'Poppins', sans-serif); cursor: pointer; transition: background .15s ease, border-color .15s ease; }
 .abp-btn--primary { border: 0; background: var(--interactive-primary-background-default, #130c0c); color: var(--text-icon-neutral-on-dark, #fff); }
@@ -517,4 +520,5 @@ const mobileSummaryOpen = ref(false)
   .abp-btn { transition: none; }
   .abp-spinner { animation-duration: 2s; }
 }
+@media (max-width: 767.98px) { .abp-summary__footer { display: none; } }
 </style>

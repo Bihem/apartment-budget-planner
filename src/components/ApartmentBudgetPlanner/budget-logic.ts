@@ -52,6 +52,12 @@ export function togglePriority(current: string[], roomId: string, max: number): 
  * Répartition indicative : poids[0] pour la priorité 1, poids[1] pour la priorité 2…
  * le dernier poids couvre toutes les pièces restantes. Les poids non utilisés sont redistribués.
  */
+/** « Bureau », « Cuisine » → « Bureau et cuisine » (libellés suivants en minuscule). */
+export function joinLabels(labels: string[]): string {
+  const l = labels.map((x, i) => (i === 0 ? x : x.charAt(0).toLowerCase() + x.slice(1)))
+  return l.length <= 1 ? (l[0] ?? '') : `${l.slice(0, -1).join(', ')} et ${l[l.length - 1]}`
+}
+
 export function computeAllocation(
   total: number | null,
   priorities: string[],
@@ -67,7 +73,7 @@ export function computeAllocation(
   named.forEach((id, i) => lines.push({ label: `${label(id)} · priorité ${i + 1}`, weight: weights[i] }))
   const others = [...ordered.slice(named.length).map(label), ...rest.map((r) => r.label)]
   if (others.length) {
-    lines.push({ label: others.join(', '), weight: weights.slice(named.length).reduce((a, b) => a + b, 0) })
+    lines.push({ label: joinLabels(others), weight: weights.slice(named.length).reduce((a, b) => a + b, 0) })
   }
   const sum = lines.reduce((a, l) => a + l.weight, 0)
   let assigned = 0
