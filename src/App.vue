@@ -396,7 +396,8 @@ main h1:focus { outline: none; }
 .bs__track--thin { height: 6px; margin-top: 4px; }
 .bs__status { margin: 0; display: flex; gap: 8px; align-items: flex-start; padding: 8px 12px; border-radius: 10px; font-size: 14px; line-height: 20px; font-weight: 500; }
 .bs__status svg { flex: none; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; }
-.bs__status.is-ok { background: #e1fef5; color: #006b44; }
+.bs__status.is-ok { background: #e1fef5; color: #130c0c; }
+.bs__status.is-ok svg { stroke: #008554; }
 .bs__status.is-over { background: #fff1eb; color: #bd4800; }
 .bs__sub { margin: 0; font-size: 14px; line-height: 20px; font-weight: 600; }
 .bs__lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
