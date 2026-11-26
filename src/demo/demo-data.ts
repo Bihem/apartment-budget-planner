@@ -18,13 +18,6 @@ export const ALL_ROOMS: PlannerRoom[] = [
   { id: 'cuisine', label: 'Cuisine', description: 'Table, chaises, rangements' },
   { id: 'salle-a-manger', label: 'Salle à manger', description: 'Table, chaises, buffet' },
   { id: 'salle-de-bain', label: 'Salle de bain', description: 'Meuble vasque, colonne, miroir' },
-] = [
-  { id: 'salon', label: 'Salon', description: 'Canapé, table basse, meuble TV' },
-  { id: 'chambre', label: 'Chambre', description: 'Lit, matelas, rangement' },
-  { id: 'cuisine', label: 'Cuisine', description: 'Table, chaises, rangements' },
-  { id: 'salle-a-manger', label: 'Salle à manger', description: 'Table, chaises, buffet' },
-  { id: 'bureau', label: 'Bureau', description: 'Bureau, chaise, étagère' },
-  { id: 'salle-de-bain', label: 'Salle de bain', description: 'Meuble vasque, colonne, miroir' },
 ]
 
 export const STYLES = ['Contemporain', 'Scandinave', 'Industriel', 'Bohème']
