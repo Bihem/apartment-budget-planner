@@ -3,7 +3,7 @@
 Composant Vue 3 qui permet à une personne qui meuble son premier logement de fixer son budget mobilier global et de choisir les pièces à équiper en premier, avec un récapitulatif mis à jour en direct.
 
 - **Maquette Figma** : [Vente-unique — Mon premier chez-moi · Budget & priorités](https://www.figma.com/design/bWZR3sctpqjQYcOUf5cBoM)
-- **Démo du parcours en 4 étapes** : [claude.ai/artifact/2XxVjEA58xHXiWwriLkU4M](https://claude.ai/artifact/2XxVjEA58xHXiWwriLkU4M) (ou `npm run dev`)
+- **Démo publique du parcours en 4 étapes** : [dikengadesign.fr/apartment-budget-planner](https://dikengadesign.fr/apartment-budget-planner/) (GitHub Pages, branche `gh-pages` ; ou `npm run dev`)
 
 > **Exercice de conception, non affilié à Vente-unique.** Réalisé dans le cadre d'un exercice de recrutement en product design. Les tokens de style (couleurs, espacements, rayons, polices) ont été relevés dans les feuilles CSS publiques de vente-unique.com ; aucun logo ni image du site n'est inclus dans ce dépôt. Les produits cités dans la démo sont des données de démonstration.
 
