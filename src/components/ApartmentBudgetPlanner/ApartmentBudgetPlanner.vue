@@ -256,7 +256,7 @@ const mobileSummaryOpen = ref(false)
       class="abp-steps"
       :steps="steps"
       :current-step="currentStep"
-      :back-label="previousLabel"
+      :back-label="steps[currentStep - 2]?.label ?? previousLabel"
       :back-disabled="loading"
       @edit-step="(n) => emit('edit-step', n)"
       @back="emit('previous')"
