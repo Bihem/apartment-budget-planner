@@ -346,7 +346,6 @@ main h1:focus { outline: none; }
 @media (max-width: 991.98px) {
   .demo__result { grid-template-columns: 1fr; padding-bottom: 72px; }
   .demo__result-side { position: static; }
-  .demo__cards { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
   .demo__mbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; padding: 14px 16px; background: #fff; border-top: 1px solid #b8a8ab52; box-shadow: 0 -4px 16px #130c0c14; font-size: 14px; }
   .demo__mbar .is-ok { color: #008554; font-weight: 500; }
   .demo__mbar .is-over { color: #bd4800; font-weight: 500; }
@@ -409,4 +408,5 @@ main h1:focus { outline: none; }
 .demo__reassure svg { flex: none; fill: none; stroke: #130c0c; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .demo__foot { max-width: 1296px; margin: 0 auto; padding: 24px 16px 8px; font-size: 12px; color: #1f14159c; }
 .demo__foot code { font-size: 12px; }
+@media (max-width: 991.98px) { .demo__cards { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); } }
 </style>
