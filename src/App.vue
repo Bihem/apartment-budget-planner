@@ -373,7 +373,7 @@ main h1:focus { outline: none; }
 .pc__price s { font-size: 12px; color: #170d0ecc; }
 .pc__badge { padding: 0 6px; border-radius: 8px; background: #fff1eb; color: #bd4800; font-size: 12px; line-height: 18px; }
 .pc__stock { font-size: 12px; color: #008554; }
-.pc__dim { align-self: flex-start; margin-top: 4px; padding: 2px 8px; border-radius: 8px; background: #c5b9bb24; font-size: 12px; line-height: 18px; }
+.pc__dim { align-self: flex-start; max-width: 100%; box-sizing: border-box; margin-top: 4px; padding: 2px 8px; border-radius: 8px; background: #c5b9bb24; font-size: 11px; line-height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pc__dim b { font-weight: 500; }
 .pc__grow { flex: 1; }
 .pc__actions { display: flex; gap: 8px; margin-top: 12px; }
