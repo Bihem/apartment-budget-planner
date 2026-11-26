@@ -3,7 +3,7 @@
  * Démo du parcours « Mon premier chez-moi » : le parent garde l'état des 4 étapes,
  * ApartmentBudgetPlanner gère l'étape 3. Revenir en arrière ne perd aucune donnée.
  */
-import { computed, reactive, ref } from 'vue'
+import { computed, nextTick, reactive, ref, watch } from 'vue'
 import {
   ApartmentBudgetPlanner,
   BudgetSummary,
@@ -21,11 +21,20 @@ const STEPS = [
   { id: 'selection', label: 'Ma sélection' },
 ]
 
-const step = ref(3)
+const step = ref(1)
 const housing = reactive({ type: 'studio', surface: 32, rooms: 1 })
 const selectedRooms = ref<string[]>(['salon', 'chambre', 'bureau', 'cuisine'])
 const style = ref('Contemporain')
 const editingStyle = ref(false)
+
+// À chaque changement d'étape : retour en haut de page et focus sur le titre (lecteurs d'écran, clavier).
+watch(step, async () => {
+  editingStyle.value = false
+  await nextTick()
+  window.scrollTo({ top: 0 })
+  const h1 = document.querySelector('main h1') as HTMLElement | null
+  if (h1) { h1.setAttribute('tabindex', '-1'); h1.focus({ preventScroll: true }) }
+})
 const planner = ref<BudgetPlannerValue>({ presetId: null, amount: null, priorities: [] })
 const result = ref<{ value: BudgetPlannerValue; referenceAmount: number } | null>(null)
 const lastErrors = ref<PlannerError[]>([])
@@ -35,6 +44,7 @@ const rooms = computed(() => ALL_ROOMS.filter((r) => selectedRooms.value.include
 const housingLabel = computed(
   () => `${HOUSING_TYPES.find((h) => h.id === housing.type)?.label} · ${housing.surface} m²`,
 )
+const housingTitle = computed(() => ({ studio: 'votre studio', t1: 'votre T1', t2: 'votre T2', coloc: 'votre chambre en colocation' } as Record<string, string>)[housing.type] ?? 'votre logement')
 const housingValid = computed(() => housing.surface >= 9 && housing.surface <= 300 && housing.rooms >= 1)
 
 // Si une pièce est retirée à l'étape 2, on la retire aussi des priorités.
@@ -184,7 +194,7 @@ const summaryRows = computed(() => [
       <!-- Étape 4 : résultat (démo) -->
       <section v-else class="demo__result" aria-labelledby="s4">
         <div class="demo__result-main">
-          <h1 id="s4" class="demo__title">Votre sélection pour votre {{ housingLabel.split(' · ')[0].toLowerCase() }}</h1>
+          <h1 id="s4" class="demo__title">Votre sélection pour {{ housingTitle }}</h1>
           <p class="demo__text">Des produits de la gamme Les Essentiels, rangés selon vos pièces prioritaires. Retirez ce que vous voulez : le budget se met à jour.</p>
           <div class="demo__chips demo__chips--criteria">
             <span class="demo__tag">{{ housingLabel }}</span>
@@ -236,6 +246,10 @@ const summaryRows = computed(() => [
           <p class="demo__hint">Le panier n’est pas relié dans cette démo.</p>
         </aside>
         <p class="demo__sr" aria-live="polite">{{ announce }}</p>
+        <div class="demo__mbar" aria-hidden="true">
+          <span><strong>{{ price(total) }}</strong> sur {{ money(budget) }}</span>
+          <span :class="remaining >= 0 ? 'is-ok' : 'is-over'">{{ remaining >= 0 ? `Reste ${price(remaining)}` : `Dépassement ${price(-remaining)}` }}</span>
+        </div>
       </section>
     </main>
 
@@ -278,6 +292,7 @@ body { margin: 0; font-family: 'Poppins', system-ui, sans-serif; color: #130c0c;
 .demo__debug { max-width: 1296px; margin: 0 auto 48px; padding: 0 16px; font-size: 13px; }
 .demo__debug summary { cursor: pointer; margin-bottom: 8px; }
 .demo__progress { margin-bottom: 32px; }
+main h1:focus { outline: none; }
 .demo__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .demo__result { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 64px; align-items: start; }
 .demo__result-main { display: grid; gap: 24px; }
@@ -301,5 +316,12 @@ body { margin: 0; font-family: 'Poppins', system-ui, sans-serif; color: #130c0c;
 .demo__status { margin: 0; padding: 8px 12px; border-radius: 10px; font-size: 13px; }
 .demo__status.is-ok { background: #e1fef5; color: #008554; }
 .demo__status.is-over { background: #fff1eb; color: #bd4800; }
-@media (max-width: 991.98px) { .demo__result { grid-template-columns: 1fr; } .demo__result-side { position: static; } }
+.demo__mbar { display: none; }
+@media (max-width: 991.98px) {
+  .demo__result { grid-template-columns: 1fr; padding-bottom: 72px; }
+  .demo__result-side { position: static; }
+  .demo__mbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; padding: 14px 16px; background: #fff; border-top: 1px solid #b8a8ab52; box-shadow: 0 -4px 16px #130c0c14; font-size: 14px; }
+  .demo__mbar .is-ok { color: #008554; font-weight: 500; }
+  .demo__mbar .is-over { color: #bd4800; font-weight: 500; }
+}
 </style>
