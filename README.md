@@ -1,17 +1,43 @@
 # ApartmentBudgetPlanner
 
-Composant Vue 3 de l'étape **« Style, budget et priorités »** du parcours **Mon premier chez-moi** (Vente-unique).
-Il permet à un primo-accédant de fixer son budget mobilier global et d'ordonner les pièces à équiper en premier, avec un récapitulatif qui se met à jour en direct.
+Composant Vue 3 qui permet à une personne qui meuble son premier logement de fixer son budget mobilier global et de choisir les pièces à équiper en premier, avec un récapitulatif mis à jour en direct.
+
+- **Maquette Figma** : [Vente-unique — Mon premier chez-moi · Budget & priorités](https://www.figma.com/design/bWZR3sctpqjQYcOUf5cBoM)
+- **Démo du parcours en 4 étapes** : [claude.ai/artifact/2XxVjEA58xHXiWwriLkU4M](https://claude.ai/artifact/2XxVjEA58xHXiWwriLkU4M) (ou `npm run dev`)
+
+> **Exercice de conception, non affilié à Vente-unique.** Réalisé dans le cadre d'un exercice de recrutement en product design. Les tokens de style (couleurs, espacements, rayons, polices) ont été relevés dans les feuilles CSS publiques de vente-unique.com ; aucun logo ni image du site n'est inclus dans ce dépôt. Les produits cités dans la démo sont des données de démonstration.
+
+## Installation
 
 ```bash
 npm install
-npm run dev        # démo du parcours en 4 étapes, étape 4 avec de vrais produits (données de démonstration)
-npm test           # 16 tests (logique, composant, briques seules)
-npm run build      # vérification TypeScript + build
+npm run dev              # démo du parcours en 4 étapes (données de démonstration)
+npm test                 # 16 tests Vitest (logique, composant, briques seules)
+npm run build            # vérification TypeScript + build
 SINGLE=1 npm run build   # démo en un seul fichier dist/index.html
 ```
 
-> Données de démonstration : `src/demo/demo-data.ts` (la démo réutilise ProgressSteps, PriorityBadge et BudgetSummary aux étapes 1, 2 et 4). Aucune connexion au catalogue Vente-unique n'est simulée.
+Vue 3 (Composition API, `<script setup>`), TypeScript, Vite, Vitest + Vue Test Utils.
+
+## Contenu
+
+```
+src/components/ApartmentBudgetPlanner/
+├── ApartmentBudgetPlanner.vue   composant de l'étape 3
+├── parts/
+│   ├── ChoiceCard.vue           choix encadré (radio / checkbox)
+│   ├── PriorityBadge.vue        pastille de rang
+│   ├── ProgressSteps.vue        indicateur d'étapes
+│   └── BudgetSummary.vue        récapitulatif et répartition
+├── budget-logic.ts              fonctions pures (montant, tranche, priorités, répartition, validation)
+├── types.ts                     types publics
+└── index.ts                     exports
+src/App.vue, src/demo/           démo du parcours (données de démonstration)
+tests/                           tests Vitest
+docs/                            analyse du site et choix UX
+```
+
+Sommaire de la documentation : [Nom](#1-nom) · [Description](#2-description) · [Cas d'utilisation](#3-cas-dutilisation) · [Structure](#4-structure) · [Propriétés](#5-propriétés) · [Événements](#6-événements) · [États](#7-états) · [Variantes](#8-variantes) · [Espacements](#9-règles-despacement) · [Responsive](#10-comportement-responsive) · [Accessibilité](#11-accessibilité) · [Exemple d'intégration](#12-exemple-dintégration)
 
 ---
 
@@ -159,3 +185,9 @@ Le composant utilise **les noms des variables CSS du site** (`--interactive-prim
 - Police de titre `--font-family-heading` (Recoleta) : chargée par le site ; en dehors, repli Georgia.
 - Bornes 300 – 10 000 €, tranches et poids 40/35/25 : hypothèses produit à valider avec les données.
 - Le style est choisi en haut de l'étape 3, hors de ce composant (événement `edit-style`).
+
+---
+
+## Licence
+
+Code fourni pour l'évaluation de l'exercice. Aucune licence de réutilisation n'est accordée : merci de me contacter pour tout autre usage.
